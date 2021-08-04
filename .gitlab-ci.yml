@@ -1,0 +1,47 @@
+variables:
+  NUGET_URL: "https://monspire-986853728599.d.codeartifact.eu-west-2.amazonaws.com/nuget/monspire/v3/index.json"
+  MAJOR_VERSION: "1"
+  MINOR_VERSION: "0"
+  GITLAB_PUSH_URL: "https://oauth2:$API_TOKEN@gitlab.com/monspire/monspire_xero-lambdas-contracts.git"
+
+stages:
+  - publish-nuget-package
+   
+step-publish-nuget-package:
+  stage: publish-nuget-package
+  image: mcr.microsoft.com/dotnet/core/sdk:3.1
+  before_script:
+    - dotnet tool install --global dotnet-ef
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - dotnet tool install -g AWS.CodeArtifact.NuGet.CredentialProvider
+    - dotnet codeartifact-creds install
+  script:
+    - apt-get update -y
+    - apt-get upgrade -y
+    - apt-get dist-upgrade -y 
+    - apt-get -y autoremove
+    - apt-get clean
+    - apt-get -y install git
+    - git config --global user.email "monspire-gitlab-user@evolve-consultants.co.uk"
+    - git config --global user.name "Gitlab Runner"
+    - git config --list
+    - patchNumber=$(awk '{print $2}' ./package-version.txt)
+    - ((patchNumber++))
+    - echo "Patch number:${patchNumber}"
+    - echo "PATCH_NUMBER\:\ ${patchNumber}" > ./package-version.txt
+    - git add ./package-version.txt
+    - git status
+    - git commit -m "Update version -a"
+    - git remote set-url origin $GITLAB_PUSH_URL
+    - git remote -v
+    - git push origin HEAD:versioning --force -o ci.skip
+    - version=$MAJOR_VERSION.$MINOR_VERSION.$patchNumber
+    - cd src
+    - dotnet pack -c Release /p:Version="${version}"
+    - cd Monspire.Xero.Lambdas.Contracts/bin/Release/
+    - dotnet nuget push Monspire.Xero.Lambdas.Contracts."${version}".nupkg --source $NUGET_URL
+  environment: development
+  tags:
+    - monspire
+  only:
+    - main
