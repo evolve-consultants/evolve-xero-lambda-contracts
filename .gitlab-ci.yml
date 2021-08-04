@@ -26,6 +26,7 @@ step-publish-nuget-package:
     - git config --global user.name "Gitlab Runner"
     - git config --list
     - patchNumber=$(awk '{print $2}' ./patch-number.txt)
+    - echo "Patch number:${patchNumber}"
     - ((patchNumber++))
     - echo "Patch number:${patchNumber}"
     - echo "PATCH_NUMBER\:\ ${patchNumber}" > ./patch-number.txt
