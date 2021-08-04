@@ -25,11 +25,11 @@ step-publish-nuget-package:
     - git config --global user.email "monspire-gitlab-user@evolve-consultants.co.uk"
     - git config --global user.name "Gitlab Runner"
     - git config --list
-    - patchNumber=$(awk '{print $2}' ./package-version.txt)
+    - patchNumber=$(awk '{print $2}' ./patch-number.txt)
     - ((patchNumber++))
     - echo "Patch number:${patchNumber}"
-    - echo "PATCH_NUMBER\:\ ${patchNumber}" > ./package-version.txt
-    - git add ./package-version.txt
+    - echo "PATCH_NUMBER\:\ ${patchNumber}" > ./patch-number.txt
+    - git add ./patch-number.txt
     - git status
     - git commit -m "Update version -a"
     - git remote set-url origin $GITLAB_PUSH_URL
