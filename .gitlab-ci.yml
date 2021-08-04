@@ -26,16 +26,15 @@ step-publish-nuget-package:
     - git config --global user.name "Gitlab Runner"
     - git config --list
     - patchNumber=$(awk '{print $2}' ./patch-number.txt)
-    - echo "Patch number:${patchNumber}"
     - ((patchNumber++))
     - echo "Patch number:${patchNumber}"
     - echo "PATCH_NUMBER\:\ ${patchNumber}" > ./patch-number.txt
     - git add ./patch-number.txt
     - git status
-    - git commit -m "Update version -a"
+    - git commit -m "Update patch number -a"
     - git remote set-url origin $GITLAB_PUSH_URL
     - git remote -v
-    - git push origin HEAD:versioning --force -o ci.skip
+    - git push origin HEAD:main --force -o ci.skip
     - version=$MAJOR_VERSION.$MINOR_VERSION.$patchNumber
     - cd src
     - dotnet pack -c Release /p:Version="${version}"
