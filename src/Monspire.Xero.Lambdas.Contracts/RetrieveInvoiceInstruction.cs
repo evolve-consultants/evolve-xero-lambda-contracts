@@ -7,5 +7,7 @@ namespace Monspire.Xero.Lambdas.Contracts
         public int TenantId { get; set; }
 
         public Guid InvoiceId { get; set; }
+
+        public Guid XeroTenantId { get; set; }
     }
 }
