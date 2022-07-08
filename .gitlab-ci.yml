@@ -11,7 +11,6 @@ step-publish-nuget-package:
   stage: publish-nuget-package
   image: mcr.microsoft.com/dotnet/core/sdk:3.1
   before_script:
-    - dotnet tool install --global dotnet-ef
     - export PATH="$PATH:/root/.dotnet/tools"
     - dotnet tool install -g AWS.CodeArtifact.NuGet.CredentialProvider
     - dotnet codeartifact-creds install
