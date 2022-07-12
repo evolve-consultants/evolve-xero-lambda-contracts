@@ -2,7 +2,7 @@ using System;
 
 namespace Monspire.Xero.Lambdas.Contracts
 {
-    public class RetrieveInvoiceInstruction
+    public class InvoiceSyncRequestedMessage
     {
         public int TenantId { get; set; }
 
