@@ -2,7 +2,7 @@
 
 namespace Monspire.Xero.Lambdas.Contracts
 {
-    public class InvoiceReconciliationInstruction
+    public class SyncInvoiceMessage
     {
         public int TenantId { get; set; }
 
